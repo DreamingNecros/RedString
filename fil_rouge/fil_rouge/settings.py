@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'cyna_web',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -74,11 +77,14 @@ WSGI_APPLICATION = 'fil_rouge.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'FilRouge',
+        'USER': 'admin',
+        'PASSWORD': '@dm|n',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
-}
-
+} 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -120,3 +126,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# URL de base pour les fichiers statiques
+STATIC_URL = '/static/'
+
+# Dossier où collecter tous les fichiers statiques lors du déploiement (commande collectstatic)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Si vous avez des fichiers statiques supplémentaires en dehors des apps (par exemple, un dossier "static" à la racine)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Si vous avez un dossier "static" global à la racine
+]
