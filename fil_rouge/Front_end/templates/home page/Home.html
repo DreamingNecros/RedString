@@ -1,0 +1,23 @@
+<!-- home.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}Home - Cyna Web{% endblock %}
+
+{% block content %}
+    <h1>Bienvenue sur le site de Cyna!</h1>
+
+    <h2>Liste des Produits</h2>
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    <strong>{{ product.nom }}</strong><br>
+                    Description: {{ product.description }}<br>
+                    Prix: {{ product.prix }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun produit trouvé.</p>
+    {% endif %}
+{% endblock %}

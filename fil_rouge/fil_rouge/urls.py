@@ -1,13 +1,18 @@
 # fil_rouge/urls.py
-
 from django.contrib import admin
-from django.urls import path, include
-from cyna_web import views as cyna
-from api import views 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.urls import path
+from User import views as user
+from Product import views as product
+from Front_end import views as front
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/produits/', views.liste_produits, name='liste_produits'),
-    path('api/produits/<int:pk>/', views.produit_detail, name='produit_detail'),
-    path('', cyna.Home, name='home'),  # Page d'accueil
+
+    # Routes pour les produits
+    path('product/', product.list_products, name='list_products'),
+    path('product/<int:pk>/', product.product_detail, name='product_detail'),
+
+    # Page d'accueil
+    path('', front.Home, name='home'),
 ]

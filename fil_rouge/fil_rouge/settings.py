@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'cyna_web',
-    'api',
+    'Front_end',
+    'User',
+    'Product'
 ]
 
 MIDDLEWARE = [
@@ -57,10 +58,13 @@ ROOT_URLCONF = 'fil_rouge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'Front_end/templates'),  
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -68,6 +72,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'fil_rouge.wsgi.application'
 
@@ -105,6 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -135,5 +141,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Si vous avez des fichiers statiques supplémentaires en dehors des apps (par exemple, un dossier "static" à la racine)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Si vous avez un dossier "static" global à la racine
+    os.path.join(BASE_DIR,'Front_end', 'static'),  # Si vous avez un dossier "static" global à la racine
 ]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Durée de vie du token d'accès
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),     # Durée de vie du token de rafraîchissement
+    'ROTATE_REFRESH_TOKENS': False,  # Ne pas renouveler le refresh token à chaque demande
+    'BLACKLIST_AFTER_ROTATION': True,  # Mettre les refresh tokens en liste noire après rotation
+}
