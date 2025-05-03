@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'Front_end',
+    'User',
+    'Product'
 ]
 
 MIDDLEWARE = [
@@ -54,10 +58,13 @@ ROOT_URLCONF = 'fil_rouge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'Front_end/templates'),  
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -65,6 +72,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'fil_rouge.wsgi.application'
 
@@ -74,11 +82,14 @@ WSGI_APPLICATION = 'fil_rouge.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'FilRouge',
+        'USER': 'admin',
+        'PASSWORD': '@dm|n',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
-}
-
+} 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -97,6 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 
 # Internationalization
@@ -120,3 +132,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# URL de base pour les fichiers statiques
+STATIC_URL = '/static/'
+
+# Dossier où collecter tous les fichiers statiques lors du déploiement (commande collectstatic)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Si vous avez des fichiers statiques supplémentaires en dehors des apps (par exemple, un dossier "static" à la racine)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'Front_end', 'static'),  # Si vous avez un dossier "static" global à la racine
+]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Durée de vie du token d'accès
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),     # Durée de vie du token de rafraîchissement
+    'ROTATE_REFRESH_TOKENS': False,  # Ne pas renouveler le refresh token à chaque demande
+    'BLACKLIST_AFTER_ROTATION': True,  # Mettre les refresh tokens en liste noire après rotation
+}
