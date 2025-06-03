@@ -1,0 +1,34 @@
+{% extends "Main/base.html" %}
+{% load static %}
+{% block content %}
+<script src="{% static 'js/cart.js' %}"></script>
+    {% if product %}
+        <h2>{{ product.name }}</h2>
+        <p>{{ product.description }}</p>
+        <p>Prix : {{ product.price }} €</p>
+        <p>Stock : {{ product.stock }}</p>
+        <p>Catégorie : {{ product.category }}</p>
+         <div class="form-group">
+            <label for="quantity_{{ product.id }}">Quantité :</label>
+            <input
+                type="number"
+                class="form-control"
+                id="quantity_{{ product.id }}"
+                min="1"
+                max="{{ product.stock }}"
+                value="1"
+                required
+            >
+        </div>
+        <button
+            type="button"
+            class="btn btn-primary btn-block btn-ajout-panier mt-auto"
+            data-id="{{ product.id }}"
+            data-stock="{{ product.stock }}"
+            data-name="{{ product.name|escapejs }}">
+            Ajouter au panier
+        </button>
+    {% else %}
+        <p class="text-danger">{{ error }}</p>
+    {% endif %}
+{% endblock %}

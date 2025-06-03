@@ -1,21 +1,23 @@
-# Product/views.py
+#api Product
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import CynaProducts as Product
-from .serializers import ProductSerializer
+from rest_framework import status
+from Product.models import CynaProducts
+from .serializers import ProductsSerializer
+import json
+
 
 @api_view(['GET'])
 def list_products(request):
-    Products = Product.objects.all()
-    serializer = ProductSerializer(Products, many=True)
+    products = CynaProducts.objects.all()
+    serializer = ProductsSerializer(products, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def product_detail(request, pk):
     try:
-        Product = Product.objects.get(pk=pk)
-    except Product.DoesNotExist:
+        product = CynaProducts.objects.get(pk=pk)
+        serializer = ProductsSerializer(product)
+        return Response(serializer.data)
+    except CynaProducts.DoesNotExist:
         return Response({'error': 'Produit non trouvé'}, status=404)
-
-    serializer = ProductSerializer(Product)
-    return Response(serializer.data)
