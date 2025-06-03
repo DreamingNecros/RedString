@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Front_end.context_processors.auth_status',
             ],
         },
     },
@@ -150,3 +151,13 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,  # Ne pas renouveler le refresh token à chaque demande
     'BLACKLIST_AFTER_ROTATION': True,  # Mettre les refresh tokens en liste noire après rotation
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+LOGIN_URL = '/login/'
+
+AUTH_USER_MODEL = 'User.AuthUser'

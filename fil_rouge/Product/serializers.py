@@ -1,9 +1,10 @@
-# api/serializers.py
-
+#facilite la partie transformation en json + permet de valider les donnée
 from rest_framework import serializers
-from .models import CynaProducts as Product
+from Product.models import CynaProducts
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductsSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source='category.name')
+
     class Meta:
-        model = Product
-        fields = '__all__'
+        model = CynaProducts
+        fields = ['id','name', 'description', 'price', 'stock', 'category']

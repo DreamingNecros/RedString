@@ -1,0 +1,16 @@
+{% extends 'Main/base.html' %}
+{% load static %}
+{% block title %}Votre Panier - Cyna Web{% endblock %}
+
+{% block content %}
+<script src="{% static 'js/cart.js' %}"></script>
+<script>
+    const adresseUrl = "{% url 'Paye' %}";
+</script>
+<div class="container mt-5">
+    <h2 class="mb-4">Votre Panier</h2>
+    <div id="panier-container">
+        <p>Chargement du panier...</p>
+    </div>
+</div>
+{% endblock %}
