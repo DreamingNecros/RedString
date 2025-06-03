@@ -21,3 +21,9 @@ python manage.py makemigrations
 python manage.py migrate
 
 verifier dans setting.py que la partie Database est bonne pour vous
+
+Découpage :
+Le dossier User contient toute la partie Api qui gere la partie utilisateur
+Le dossier Product contient toute la partie Api qui gere la partie Produit
+Le dossier Front_end contient toute la partie Front_end c'est a dire les fichier html, les images, le js ...
+Le dossier fil_rouge contient les setting de Django et les url 

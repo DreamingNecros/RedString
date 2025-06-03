@@ -1,0 +1,34 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}Home - Cyna Web{% endblock %}
+
+{% block content %}
+  {% if error %}
+    <p style="color:red;">{{ error }}</p>
+  {% endif %}
+  <div class="container text-center class=text-center">
+        <form method="post">
+          <div class="col">Adresse</div>
+          {% csrf_token %}
+          <input type="text" name="number" placeholder="numéro de rue" required><br>
+          <input type="text" name="street" placeholder="rue" required><br>
+          <input type="text" name="complement" placeholder="complement" ><br>
+          <input type="text" name="city" placeholder="Ville" required><br>
+          <input type="text" name="region" placeholder="Region" ><br>
+          <input type="text" name="postal" placeholder="Code Postal" required><br>
+          <label for="Ville">Ville:</label>
+          <input list="Ville" id="Ville" name="Ville" />
+
+          <datalist id="Ville">
+            <option value="Paris"></option>
+            <option value="VilleJuif"></option>
+            <option value="Maison-Alfort"></option>
+            <!-- recup les villes avec une api -->
+          </datalist>
+          <br>
+          <a href="{% url 'card' %}" class="btn btn-primary btn-block">Suivant</a>
+          <a href="{% url 'card' %}" class="btn btn-primary btn-block">Ajouter Adresse</a>
+        </form>
+      </div>
+  </div>
+{% endblock %}

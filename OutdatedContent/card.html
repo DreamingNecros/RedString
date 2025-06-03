@@ -1,0 +1,32 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}Home - Cyna Web{% endblock %}
+
+{% block content %}
+  {% if error %}
+    <p style="color:red;">{{ error }}</p>
+  {% endif %}
+  <div class="container text-center class=text-center">
+        <form method="post">
+          <div class="col">Carte Bleu</div>
+          {% csrf_token %}
+          <input type="text" name="number" placeholder="numéro de carte" required><br>
+          <input type="text" name="expiration" placeholder="date d'éxpiration" required><br>
+          <input type="text" name="lastName" placeholder="complement" ><br>
+          <input type="text" name="firstName" placeholder="Type" required><br>
+          <input type="text" name="ccv" placeholder="Region" ><br>
+          <label for="Type">>Type</label>
+          <input list="Type" id="Type" name="Type" />
+
+          <datalist id="Type">
+            <option value="Master"></option>
+            <option value="..."></option>
+            <option value="..."></option>
+            <!-- recup les Types avec une api -->
+          </datalist>
+          <br>
+          <a href="{% url 'confirmation' %}" class="btn btn-primary btn-block">Confirmer</a>
+        </form>
+      </div>
+  </div>
+{% endblock %}

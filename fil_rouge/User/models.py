@@ -1,6 +1,26 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import BaseUserManager
+from django.utils import timezone
 
-class AuthUser(models.Model):
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, email, password=None, **extra_fields):
+        if not username:
+            raise ValueError("Le nom d’utilisateur est requis")
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.set_password(password)
+        user.date_joined = timezone.now()
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", 1)
+        extra_fields.setdefault("is_superuser", 1)
+        extra_fields.setdefault("is_active", 1)
+        return self.create_user(username, email, password, **extra_fields)
+
+class AuthUser(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(blank=True, null=True)
     is_superuser = models.IntegerField()
@@ -13,7 +33,11 @@ class AuthUser(models.Model):
     is_staff = models.IntegerField()
     is_active = models.IntegerField()
     date_joined = models.DateTimeField()
-
+    objects = CustomUserManager()
+    
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email'] 
+    
     class Meta:
         managed = False
         db_table = 'auth_user'

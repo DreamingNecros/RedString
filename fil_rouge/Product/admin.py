@@ -1,3 +1,7 @@
-from django.contrib import admin
+#partie panel admin
 
-# Register your models here.
+from django.contrib import admin
+from .models import CynaProducts, CynaProductCategories
+
+admin.site.register(CynaProducts)
+admin.site.register(CynaProductCategories)
