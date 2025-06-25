@@ -136,19 +136,48 @@ class EditProfileView(View):
             })
 
 
+from django.views import View
+from django.shortcuts import render
+import requests
+
 class ProductView(View):
     def get(self, request):
         try:
-            response = requests.get("http://localhost:8000/api/product/")
+            # Récupérer les paramètres de la requête GET
+            q = request.GET.get("q", "")
+            prix_min = request.GET.get("prix_min", "")
+            prix_max = request.GET.get("prix_max", "")
+            page = request.GET.get("page", "")
+            # Construire l'URL avec les paramètres s'ils existent
+            params = {}
+            if q:
+                params["q"] = q
+            if prix_min:
+                params["prix_min"] = prix_min
+            if prix_max:
+                params["prix_max"] = prix_max
+            if page:
+                params["page"] = page
+
+            # Appeler l’API interne avec les bons paramètres
+            response = requests.get("http://localhost:8000/api/recherche/", params=params)
 
             if response.status_code == 200:
                 products_data = response.json()
-                return render(request, "Product/all.html", {"products": products_data})
+                return render(request, "Product/all.html", {
+                    "products": products_data.get("results", []),
+                    "count": products_data.get("count", 0),
+                    "next": products_data.get("next"),
+                    "previous": products_data.get("previous"),
+                    "q": q,
+                    "prix_min": prix_min,
+                    "prix_max": prix_max,
+                })
             else:
-                return render(request, "Product/all.html", {"error": "Aucun produit."})
+                return render(request, "Product/all.html", {"error": "Aucun produit trouvé."})
 
         except requests.exceptions.RequestException:
-            return render(request, "Product/all.htm", {"error": "Erreur lors de la connexion à l'API."})
+            return render(request, "Product/all.html", {"error": "Erreur lors de la connexion à l'API."})
 
     
 class ProductDetailView(View):

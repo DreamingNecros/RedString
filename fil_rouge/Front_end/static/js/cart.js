@@ -48,10 +48,7 @@ function ajouterAuPanier(id, stock, name, quantity) {
 
 function afficherPanier() {
     const panierContainer = document.getElementById("panier-container");
-    if (!panierContainer) {
-        console.error("Élément #panier-container introuvable.");
-        return;
-    }
+    if (!panierContainer) return;
 
     const panier = JSON.parse(localStorage.getItem("panier") || "{}");
 
@@ -81,11 +78,13 @@ function afficherPanier() {
         html += `
             <tr>
                 <td>${produit.name}</td>
-                <td>${produit.quantity}</td>
                 <td>
-                    <button class="btn btn-danger btn-sm" onclick="supprimerProduit('${id}')">
-                        Supprimer
-                    </button>
+                    <input type="number" min="1" max="${produit.stock}" value="${produit.quantity}"
+                        class="form-control"
+                        onchange="modifierQuantite('${id}', this.value)">
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="supprimerProduit('${id}')">Supprimer</button>
                 </td>
             </tr>
         `;
@@ -96,10 +95,23 @@ function afficherPanier() {
         </table>
         <p><strong>Total d'articles :</strong> ${totalProduits}</p>
         <button class="btn btn-secondary" onclick="viderPanier()">Vider le panier</button>
-        <a href="${adresseUrl}" class="btn btn-primary btn-block">Payer</a>
+        <a href="${payeUrl}" class="btn btn-primary btn-block">Payer</a>
     `;
-    
+
     panierContainer.innerHTML = html;
+}
+
+function modifierQuantite(id, newQuantity) {
+    let panier = JSON.parse(localStorage.getItem("panier") || "{}");
+
+    if (panier[id]) {
+        newQuantity = parseInt(newQuantity);
+        if (newQuantity >= 1 && newQuantity <= panier[id].stock) {
+            panier[id].quantity = newQuantity;
+        }
+        localStorage.setItem("panier", JSON.stringify(panier));
+        afficherPanier();
+    }
 }
 
 function supprimerProduit(id) {
