@@ -38,4 +38,8 @@ urlpatterns = [
     path('product/detail/', front.ProductDetailView.as_view(), name='product_detail'),  
     path('cart/', front.CartView.as_view(), name='cart'),
     path('paye',front.PayeView.as_view(), name='paye'),
+
+    #API Recherche
+    path('api/recherche/', product.api_recherche, name='api_recherche')
+
 ]

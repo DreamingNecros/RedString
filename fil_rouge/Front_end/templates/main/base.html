@@ -43,6 +43,16 @@
                     <a class="nav-link" href="{% url 'products' %}">produit</a>
                 </li>
             </ul>
+            <form action="{% url 'products' %}" method="get" class="d-flex">
+                <input type="text" name="q" value="{{ q }}" placeholder="Rechercher..." class="form-control me-2">
+                <input type="number" name="prix_min" value="{{ prix_min }}" placeholder="Prix min" class="form-control me-2">
+                <input type="number" name="prix_max" value="{{ prix_max }}" placeholder="Prix max" class="form-control me-2">
+                <input type="checkbox" name="en_stock" id="en_stock" class="form-check-input">
+                <label for="en_stock" class="form-check-label">Uniquement les produits en stock</label>
+                <button type="submit" class="btn btn-outline-light">🔍</button>
+            </form>
+            <div id="resultats-produits" class="d-flex flex-wrap"></div>
+            <div id="pagination" class="mt-3"></div>
         </div>
     </nav>
 
