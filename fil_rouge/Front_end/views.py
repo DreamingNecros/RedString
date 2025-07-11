@@ -160,6 +160,10 @@ class EditProfileView(View):
             })
         
 
+from django.views import View
+from django.shortcuts import render
+import requests
+
 class ProductView(View):
     def get(self, request):
         q = request.GET.get('q', '')

@@ -10,7 +10,6 @@ from django.db.models import Q
 import stripe
 from django.conf import settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
 @api_view(['GET'])
 def list_products(request):
     products = CynaProducts.objects.all()

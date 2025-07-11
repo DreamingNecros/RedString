@@ -105,8 +105,6 @@ function afficherPanier() {
         <p><strong>Total d'articles :</strong> ${totalProduits}</p>
         <button class="btn btn-secondary" onclick="viderPanier()">Vider le panier</button>
         <button id="pay-button" class="btn btn-primary btn-block">Payer</button>
-    `;
-
     panierContainer.innerHTML = html;
 
     // Gestion clic du bouton Payer
@@ -121,6 +119,19 @@ function afficherPanier() {
         }
         window.location.href = payeUrl;
     });
+}
+
+function modifierQuantite(id, newQuantity) {
+    let panier = JSON.parse(localStorage.getItem("panier") || "{}");
+
+    if (panier[id]) {
+        newQuantity = parseInt(newQuantity);
+        if (newQuantity >= 1 && newQuantity <= panier[id].stock) {
+            panier[id].quantity = newQuantity;
+        }
+        localStorage.setItem("panier", JSON.stringify(panier));
+        afficherPanier();
+    }
 }
 
 function modifierQuantite(id, newQuantity) {
