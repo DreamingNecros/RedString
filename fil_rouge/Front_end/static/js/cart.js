@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const price = parseFloat(button.dataset.price);
 
             // Récupérer la quantité depuis l'input correspondant
-            // Récupérer la quantité depuis l'input correspondant
             const quantityInput = document.getElementById(`quantity_${id}`);
             const quantity = parseInt(quantityInput.value);
 
@@ -22,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     message.style.display = "none";
                 }, 3000);
             }
-            ajouterAuPanier(id, stock, name, quantity, price);
 
         });
     });
@@ -62,7 +60,6 @@ function ajouterAuPanier(id, stock, name, quantity, price) {
 function afficherPanier() {
     const panierContainer = document.getElementById("panier-container");
     if (!panierContainer) return;
-    if (!panierContainer) return;
 
     const panier = JSON.parse(localStorage.getItem("panier") || "{}");
 
@@ -98,12 +95,6 @@ function afficherPanier() {
                         onchange="modifierQuantite('${id}', this.value)">
                 </td>
                 <td>
-                    <input type="number" min="1" max="${produit.stock}" value="${produit.quantity}"
-                        class="form-control"
-                        onchange="modifierQuantite('${id}', this.value)">
-                </td>
-                <td>
-                    <button class="btn btn-danger btn-sm" onclick="supprimerProduit('${id}')">Supprimer</button>
                     <button class="btn btn-danger btn-sm" onclick="supprimerProduit('${id}')">Supprimer</button>
                 </td>
             </tr>
