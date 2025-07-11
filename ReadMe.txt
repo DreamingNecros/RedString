@@ -1,3 +1,5 @@
+LA MAIN BRANCH EST PAS LA BONNE IL FAUT ALLER SUR LA BRANCH PREP
+
 Il faut ces choses dans l'environement pour que à marche
 -pip install requests (pour faire des requests a l'api)
 -pip install mysqlclient (pour mysql)
