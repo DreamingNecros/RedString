@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const name = button.dataset.name;
             const stock = parseInt(button.dataset.stock);
             const price = parseFloat(button.dataset.price);
-            const price = parseFloat(button.dataset.price);
 
             // Récupérer la quantité depuis l'input correspondant
             // Récupérer la quantité depuis l'input correspondant
@@ -25,13 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             ajouterAuPanier(id, stock, name, quantity, price);
 
-            const message = document.getElementById("message-ajout-panier");
-            if (message) {
-                message.style.display = "block";
-                setTimeout(() => {
-                    message.style.display = "none";
-                }, 3000);
-            }
         });
     });
 
@@ -41,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function ajouterAuPanier(id, stock, name, quantity, price) {
+
 function ajouterAuPanier(id, stock, name, quantity, price) {
     let panier = JSON.parse(localStorage.getItem("panier") || "{}");
 
