@@ -1,19 +1,6 @@
 {% extends 'Main/base.html' %}
 {% load static %}
+{% block title %}Votre Panier - Cyna Web{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Résumé de votre panier</h2>
-    <div id="cart-summary"></div>
-
-    <button id="pay-button">Payer</button>
-</div>
-
-<script>
-    const stripePublicKey = "{{ stripe_pub_key }}";
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://js.stripe.com/v3/"></script>
-<script src="{% static 'js/payment.js' %}"></script>
-
 {% endblock %}
