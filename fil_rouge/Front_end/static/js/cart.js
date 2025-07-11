@@ -7,11 +7,22 @@ document.addEventListener("DOMContentLoaded", function () {
             const name = button.dataset.name;
             const stock = parseInt(button.dataset.stock);
             const price = parseFloat(button.dataset.price);
+            const price = parseFloat(button.dataset.price);
 
+            // Récupérer la quantité depuis l'input correspondant
             // Récupérer la quantité depuis l'input correspondant
             const quantityInput = document.getElementById(`quantity_${id}`);
             const quantity = parseInt(quantityInput.value);
 
+            ajouterAuPanier(id, stock, name, quantity, price);
+
+            const message = document.getElementById("message-ajout-panier");
+            if (message) {
+                message.style.display = "block";
+                setTimeout(() => {
+                    message.style.display = "none";
+                }, 3000);
+            }
             ajouterAuPanier(id, stock, name, quantity, price);
 
             const message = document.getElementById("message-ajout-panier");
@@ -30,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+function ajouterAuPanier(id, stock, name, quantity, price) {
 function ajouterAuPanier(id, stock, name, quantity, price) {
     let panier = JSON.parse(localStorage.getItem("panier") || "{}");
 
@@ -57,6 +69,7 @@ function ajouterAuPanier(id, stock, name, quantity, price) {
 
 function afficherPanier() {
     const panierContainer = document.getElementById("panier-container");
+    if (!panierContainer) return;
     if (!panierContainer) return;
 
     const panier = JSON.parse(localStorage.getItem("panier") || "{}");
@@ -93,6 +106,12 @@ function afficherPanier() {
                         onchange="modifierQuantite('${id}', this.value)">
                 </td>
                 <td>
+                    <input type="number" min="1" max="${produit.stock}" value="${produit.quantity}"
+                        class="form-control"
+                        onchange="modifierQuantite('${id}', this.value)">
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="supprimerProduit('${id}')">Supprimer</button>
                     <button class="btn btn-danger btn-sm" onclick="supprimerProduit('${id}')">Supprimer</button>
                 </td>
             </tr>
