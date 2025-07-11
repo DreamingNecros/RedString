@@ -9,12 +9,7 @@ from urllib.parse import urlencode
 from django.db.models import Q
 import math
 from django.conf import settings
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from Product.models import CynaProducts
-from urllib.parse import urlencode
-from django.db.models import Q
-import math
-from django.conf import settings
+from urllib.parse import urlparse
 
 def logout_view(request):
     request.session.flush()
@@ -35,26 +30,14 @@ def Home(request):
         'product4': product4,
     }
     return render(request, 'Home/Home.html', context)
-    produits = list(CynaProducts.objects.all()[:4])  
-    
-    product1 = produits[0] if len(produits) > 0 else None
-    product2 = produits[1] if len(produits) > 1 else None
-    product3 = produits[2] if len(produits) > 2 else None
-    product4 = produits[3] if len(produits) > 3 else None
 
-    context = {
-        'product1': product1,
-        'product2': product2,
-        'product3': product3,
-        'product4': product4,
-    }
-    return render(request, 'Home/Home.html', context)
 
 class LoginForm(View):
     def get(self, request):
         referer = request.META.get("HTTP_REFERER")
-        if referer and "/login" not in referer:  # éviter de stocker login comme origine
-            request.session["next"] = referer
+        if referer and "/login" not in referer:
+            path = urlparse(referer).path
+            request.session["next"] = path
         return render(request, "User/login.html")
 
     def post(self, request):
@@ -78,15 +61,9 @@ class LoginForm(View):
 
             redirect_url = f"{next_url}?token={token}"
 
-            token = data.get("access")
-            next_url = request.session.pop("next", "home")
-
-            redirect_url = f"{next_url}?token={token}"
-
             if data.get("is_superuser"):
                 return redirect("/admin/") 
             else:
-                return redirect(redirect_url)
                 return redirect(redirect_url)
         else:
             return render(request, "User/login.html", {"error": "Identifiants incorrects"})
@@ -254,68 +231,6 @@ class ProductView(View):
             "en_stock": en_stock,
         }
         return render(request, "Product/all.html", context)
-        q = request.GET.get('q', '')
-        prix_min = request.GET.get('prix_min', '')
-        prix_max = request.GET.get('prix_max', '')
-        en_stock = request.GET.get('en_stock', '')
-        page = request.GET.get('page', 1)
-
-        produits = CynaProducts.objects.all()
-
-        if q:
-                produits = produits.filter(
-                Q(name__icontains=q) |
-                Q(category__name__icontains=q)
-            )
-        try:
-            if prix_min:
-                produits = produits.filter(price__gte=float(prix_min))
-            if prix_max:
-                produits = produits.filter(price__lte=float(prix_max))
-        except ValueError:
-            pass  # ignorer les valeurs non valides
-
-        if en_stock.lower() == 'true':
-            produits = produits.filter(stock__gt=0)
-
-        paginator = Paginator(produits, 6)
-
-        try:
-            produits_page = paginator.page(page)
-        except PageNotAnInteger:
-            produits_page = paginator.page(1)
-        except EmptyPage:
-            produits_page = paginator.page(paginator.num_pages)
-
-        query_params = {}
-        if q:
-            query_params['q'] = q
-        if prix_min:
-            query_params['prix_min'] = prix_min
-        if prix_max:
-            query_params['prix_max'] = prix_max
-        if en_stock:
-            query_params['en_stock'] = en_stock
-
-        base_query = urlencode(query_params)
-
-        context = {
-            "products": produits_page.object_list,
-            "current_page": produits_page.number,
-            "total_pages": paginator.num_pages,
-            "has_previous": produits_page.has_previous(),
-            "has_next": produits_page.has_next(),
-            "previous_page_number": produits_page.previous_page_number() if produits_page.has_previous() else None,
-            "next_page_number": produits_page.next_page_number() if produits_page.has_next() else None,
-            "page_range": range(1, paginator.num_pages + 1),
-            "base_query": base_query,
-            "q": q,
-            "prix_min": prix_min,
-            "prix_max": prix_max,
-            "en_stock": en_stock,
-        }
-        return render(request, "Product/all.html", context)
-
     
 class ProductDetailView(View):
     def get(self, request):
