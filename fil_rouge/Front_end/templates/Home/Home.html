@@ -1,8 +1,84 @@
-<!-- home.html -->
 {% extends 'Main/base.html' %}
 
 {% block title %}Home - Cyna Web{% endblock %}
-
+{% load static %}
 {% block content %}
-    <h1 class="text-center">Bienvenue sur le site de Cyna!</h1>
+    <head>
+        <link rel="stylesheet" href="{% static 'Css/carousel.css' %}"> 
+    </head>
+    <div id="Scaler">
+    </br>
+    </br>
+    </br>
+        <h1 class="text-center">Bienvenue sur le site de Cyna!</h1>
+        <section class="carousel" aria-label="Gallery">
+            <ol class="carousel__viewport">
+                <li id="carousel__slide1"
+                    tabindex="0"
+                    class="carousel__slide">
+                <div class="carousel__snapper">
+                    <h3>{{ product1.name }}</h3>
+                    <p>{{ product1.description }}</p>
+                    <p>Prix : {{ product1.price }}</p>
+                    <p>Stock : {{ product1.stock }}</p>
+                    <p>Catégorie : {{ product1.category.name }}</p>
+                </div>
+                
+                <li id="carousel__slide2"
+                    tabindex="0"
+                    class="carousel__slide">
+                <div class="carousel__snapper">
+                    <h3>{{ product2.name }}</h3>
+                    <p>{{ product2.description }}</p>
+                    <p>Prix : {{ product2.price }}</p>
+                    <p>Stock : {{ product2.stock }}</p>
+                    <p>Catégorie : {{ product2.category.name }}</p>
+                </div>
+
+                </li>
+                <li id="carousel__slide3"
+                    tabindex="0"
+                    class="carousel__slide">
+                <div class="carousel__snapper">
+                    <h3>{{ product3.name }}</h3>
+                    <p>{{ product3.description }}</p>
+                    <p>Prix : {{ product3.price }}</p>
+                    <p>Stock : {{ product3.stock }}</p>
+                    <p>Catégorie : {{ product3.category.name }}</p>
+                </div>
+                </li>
+                <li id="carousel__slide4"
+                    tabindex="0"
+                    class="carousel__slide">
+                <div class="carousel__snapper">
+                    <h3>{{ product4.name }}</h3>
+                    <p>{{ product4.description }}</p>
+                    <p>Prix : {{ product4.price }}</p>
+                    <p>Stock : {{ product4.stock }}</p>
+                    <p>Catégorie : {{ product4.category.name }}</p>
+                </div>
+                </li>
+            </ol>
+            <aside class="carousel__navigation">
+                <ol class="carousel__navigation-list">
+                <li class="carousel__navigation-item">
+                    <a href="#carousel__slide1"
+                    class="carousel__navigation-button">Go to slide 1</a>
+                </li>
+                <li class="carousel__navigation-item">
+                    <a href="#carousel__slide2"
+                    class="carousel__navigation-button">Go to slide 2</a>
+                </li>
+                <li class="carousel__navigation-item">
+                    <a href="#carousel__slide3"
+                    class="carousel__navigation-button">Go to slide 3</a>
+                </li>
+                <li class="carousel__navigation-item">
+                    <a href="#carousel__slide4"
+                    class="carousel__navigation-button">Go to slide 4</a>
+                </li>
+                </ol>
+            </aside>
+        </section>
+    </div>
 {% endblock %}
