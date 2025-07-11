@@ -1,31 +1,73 @@
-{% extends 'Main/base.html' %}
+{% extends "Main/base.html" %}
+{% block title %}Tous les produits{% endblock %}
 {% load static %}
-{% block title %}Liste des Produits - Cyna Web{% endblock %}
-
 {% block content %}
 <script src="{% static 'js/cart.js' %}"></script>
-<div class="container mt-5">
-    <h2 class="mb-4">Liste des Produits</h2>
+<div class="container mt-4">
+    <h2>Tous les produits</h2>
 
-    {% if products %}
-        <div class="row">
-            {% for product in products %}
+    <div class="mb-4">
+        <nav aria-label="Pagination">
+            <ul class="pagination justify-content-center">
+                {% if previous_page_number %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ previous_page_number }}&q={{ q }}&prix_min={{ prix_min }}&prix_max={{ prix_max }}&en_stock={{ en_stock }}" aria-label="Précédent">
+                            <span aria-hidden="true">&laquo; Précédent</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo; Précédent</span>
+                    </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        Page {{ current_page }} sur {{ total_pages }}
+                    </span>
+                </li>
+
+                {% if next_page_number %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ next_page_number }}&q={{ q }}&prix_min={{ prix_min }}&prix_max={{ prix_max }}&en_stock={{ en_stock }}" aria-label="Suivant">
+                            <span aria-hidden="true">Suivant &raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Suivant &raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <div class="row" id="resultats-produits">
+        {% if products %}
+            {% for p in products %}
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">{{ product.description }}</p>
-                            <p><strong>Prix :</strong> {{ product.price }} €</p>
-                            <p><strong>Stock :</strong> {{ product.stock }}</p>
-                            <p><strong>Catégorie :</strong> {{ product.category }}</p>
-                            <a href="{% url 'product_detail' %}?id={{ product.id }}" class="btn btn-primary btn-block">Fichie produit</a>
+                            <h5 class="card-title">{{ p.name }}</h5>
+                            <p class="card-text">{{ p.description }}</p>
+                            <p class="card-text">Prix : {{ p.price }} €</p>
+                            <p class="card-text">Stock : {{ p.stock }}</p>
+                            <p class="card-text">Catégorie : {{ p.category.name }}</p>
+                            <div class="form-group">
+                                <label for="quantity_{{ p.id }}">Quantité :</label>
+                                <input type="number" id="quantity_{{ p.id }}" value="1" min="1" max="{{ p.stock }}" class="form-control">
+                            </div>
+                            <!-- Bouton remplacé par lien -->
+                            <a href="{% url 'product_detail' %}?id={{ p.id }}" class="btn btn-primary mt-auto">
+                                Voir le produit
+                            </a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
-        </div>
-    {% else %}
-        <p class="text-muted">Aucun produit trouvé.</p>
-    {% endif %}
+        {% else %}
+            <p>Aucun produit disponible.</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

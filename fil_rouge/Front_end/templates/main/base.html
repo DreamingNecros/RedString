@@ -1,57 +1,80 @@
-<!-- base.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Mon Site{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'Css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Mon Site</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'home' %}">Accueil <span class="sr-only">(current)</span></a>
+            </li>
 
-    <!-- Navbar incluse ici, valable pour toutes les pages -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Mon Site</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'home' %}">Accueil <span class="sr-only"></span></a>
-                </li>
-                {% if is_authenticated_token %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'compte' %}">Mon compte</a>
-                    </li>
-                    <li class="nav-item">
-                        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link nav-link" style="padding: 0; margin: 0;">Se déconnecter</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Connexion</a>
-                    </li>
-                {% endif %}
+            {% if is_authenticated_token %}
                 <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cart' %}">Panier</a>
+                    <a class="nav-link" href="{% url 'compte' %}">Mon compte</a>
                 </li>
+            {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'products' %}">produit</a>
+                    <a class="nav-link" href="{% url 'login' %}">Connexion</a>
                 </li>
-            </ul>
+            {% endif %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'cart' %}">Panier</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'products' %}">Produit</a>
+            </li>
+        </ul>
+
+        {% if is_authenticated_token %}
+            <form method="post" action="{% url 'logout' %}" class="form-inline my-2 my-lg-0">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link nav-link" style="padding: 0;">Se déconnecter</button>
+            </form>
+        {% endif %}
+         <div class="ml-auto d-flex align-items-center">
+            <form action="{% url 'products' %}" method="get" class="form-inline d-flex align-items-center">
+                <input type="text" name="q" value="{{ q }}" placeholder="Rechercher..." class="form-control mr-2" />
+                <input type="number" name="prix_min" value="{{ prix_min }}" placeholder="Prix min" class="form-control mr-2" style="max-width: 90px;" />
+                <input type="number" name="prix_max" value="{{ prix_max }}" placeholder="Prix max" class="form-control mr-2" style="max-width: 90px;" />
+                
+                <div class="form-check form-check-inline mr-2">
+                    <input type="checkbox" name="en_stock" id="en_stock" class="form-check-input" />
+                    <label for="en_stock" class="form-check-label">Stock</label>
+                </div>
+
+                <button type="submit" class="btn btn-outline-primary">🔍</button>
+            </form>
         </div>
-    </nav>
-
-    <div class="container">
-        {% block content %}{% endblock %}
     </div>
+</nav>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+<script src="{% static 'js/store_token.js' %}"></script>
+<script src="{% static 'js/jquery-3.5.1.slim.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger
+    intent="WELCOME"
+    chat-title="Fil_rouge_agent"
+    agent-id="49ef46c3-a956-481c-b89c-ee257a389381"
+    language-code="fr"
+    ></df-messenger>
 </body>
 </html>
-

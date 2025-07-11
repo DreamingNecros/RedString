@@ -37,5 +37,14 @@ urlpatterns = [
     path('products/', front.ProductView.as_view(), name='products'),
     path('product/detail/', front.ProductDetailView.as_view(), name='product_detail'),  
     path('cart/', front.CartView.as_view(), name='cart'),
-    path('paye',front.PayeView.as_view(), name='paye'),
+
+    #API payement
+    path('api/payment/', product.payment, name="payment"),
+    
+    #Page payement
+    path('paye/',front.PayeView.as_view(), name='paye'),
+
+    #API Recherche
+    path('api/recherche/', product.api_recherche, name='api_recherche')
+
 ]
