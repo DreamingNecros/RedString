@@ -6,21 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const id = button.dataset.id;
             const name = button.dataset.name;
             const stock = parseInt(button.dataset.stock);
-            const price = parseFloat(button.dataset.price);
 
-            // Récupérer la quantité depuis l'input correspondant
             const quantityInput = document.getElementById(`quantity_${id}`);
             const quantity = parseInt(quantityInput.value);
 
-            ajouterAuPanier(id, stock, name, quantity, price);
-
-            const message = document.getElementById("message-ajout-panier");
-            if (message) {
-                message.style.display = "block";
-                setTimeout(() => {
-                    message.style.display = "none";
-                }, 3000);
-            }
+            ajouterAuPanier(id, stock, name, quantity);
         });
     });
 
@@ -30,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function ajouterAuPanier(id, stock, name, quantity, price) {
+function ajouterAuPanier(id, stock, name, quantity) {
     let panier = JSON.parse(localStorage.getItem("panier") || "{}");
 
     if (panier[id]) {
@@ -39,17 +29,18 @@ function ajouterAuPanier(id, stock, name, quantity, price) {
         panier[id] = {
             name: name,
             quantity: quantity,
-            stock: stock,
-            price: price
+            stock: stock
         };
     }
 
+    // Empêche le dépassement de stock
     if (panier[id].quantity > stock) {
         panier[id].quantity = stock;
     }
 
     localStorage.setItem("panier", JSON.stringify(panier));
 
+    // Met à jour l'affichage si sur la page panier
     if (document.getElementById("panier-container")) {
         afficherPanier();
     }
@@ -104,34 +95,10 @@ function afficherPanier() {
         </table>
         <p><strong>Total d'articles :</strong> ${totalProduits}</p>
         <button class="btn btn-secondary" onclick="viderPanier()">Vider le panier</button>
-        <button id="pay-button" class="btn btn-primary btn-block">Payer</button>
+        <a href="${payeUrl}" class="btn btn-primary btn-block">Payer</a>
+    `;
+
     panierContainer.innerHTML = html;
-
-    // Gestion clic du bouton Payer
-    const payButton = document.getElementById("pay-button");
-    payButton.addEventListener("click", () => {
-        const jwtToken = localStorage.getItem("access_token");
-
-        if (!jwtToken) {
-            alert("Vous devez être connecté pour payer.");
-            window.location.href = "/login/";
-            return;
-        }
-        window.location.href = payeUrl;
-    });
-}
-
-function modifierQuantite(id, newQuantity) {
-    let panier = JSON.parse(localStorage.getItem("panier") || "{}");
-
-    if (panier[id]) {
-        newQuantity = parseInt(newQuantity);
-        if (newQuantity >= 1 && newQuantity <= panier[id].stock) {
-            panier[id].quantity = newQuantity;
-        }
-        localStorage.setItem("panier", JSON.stringify(panier));
-        afficherPanier();
-    }
 }
 
 function modifierQuantite(id, newQuantity) {

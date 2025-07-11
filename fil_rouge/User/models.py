@@ -117,6 +117,7 @@ class CynaOrders(models.Model):
         managed = False
         db_table = 'cyna_orders'
 
+
 class CynaRelUserCard(models.Model):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
